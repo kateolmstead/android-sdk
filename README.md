@@ -23,16 +23,6 @@ Outline
     * [Using Code Callbacks](#using-code-callbacks)
 * [Support Issues](#support-issues)
 
-Prerequisites
-=============
-Before you can integrate with the PlayRM SDK you'll need to sign up and register your game.
-
-## Signing Up for the PlayRM Service
-
-Visit <a href="https://controlpanel.playnomics.com/signup" target="_blank">https://controlpanel.playnomics.com/signup</a> to create an account. The control panel is the dashboard to manage PlayRM features once the SDK integration is completed.
-
-## Register Your Game
-After receiving a registration confirmation email, login to the <a href="https://controlpanel.playnomics.com" target="_blank">control panel</a>. Select the "Applications" tab and create a new application. Your application will be granted an Application ID (`<APPID>`) and an API KEY.
 
 Basic Integration
 =================
@@ -40,7 +30,11 @@ Basic Integration
 ## Installing the SDK
 You can download the SDK by forking this repo or downloading the archived files. Include PlaynomicsAndroidSDK.jar file in the *build* folder. 
 
-Add the JAR to your Android application build path.
+Add the JAR to your Android application build path. This example is for Eclipse.
+
+<img src="http://integatrion.playnomics.com/img/android/eclipse-import.png"/>
+
+Make sure the JAR file is included in your Export.
 
 Add the following permissions to your Android application manifest file if they don't already exist:
 
@@ -68,11 +62,15 @@ All public methods, except for messaging specific calls, return an enumeration `
     <tbody>
         <tr>
             <td><code>SENT</code></td>
-            <td></td>
+            <td>
+                The event has been sent to PlayRM.
+            </td>
         </tr>
         <tr>
             <td><code>SWITCHED</code></td>
-            <td></td>
+            <td>
+                The <code>Activity</code> context has been switched.
+            </td>
         </tr>
         <tr>
             <td><code>STOPPED</code></td>
@@ -80,35 +78,46 @@ All public methods, except for messaging specific calls, return an enumeration `
         </tr>
         <tr>
             <td><code>ALREADY_STARTED</code></td>
-            <td></td>
+            <td>
+                You've already started the session. <code>PlaynomicsSession.start</code> was called unnecessarily.
+            </td>
         </tr>
         <tr>
             <td><code>ALREADY_SWITCHED</code></td>
-            <td></td>
+            <td>
+                You've already switched the <code>Activity</code> context. <code>PlaynomicsSession.switchActivity</code> was called unnecessarily.
+            </td>
         </tr>
         <tr>
             <td><code>ALREADY_STOPPED</code></td>
-            <td></td>
+            <td>
+                You've already stopped the session. <code>PlaynomicsSession.stop</code> was called unnecessarily.
+            </td>
         </tr>
         <tr>
             <td><code>SESSION_RESUMED</code></td>
-            <td></td>
+            <td>
+                The session is being resumed. 
+            </td>
         </tr>
         <tr>
             <td><code>START_NOT_CALLED</code></td>
-            <td></td>
+            <td>
+                You didn't start the session. The SDK won't be able to report any data to the PlayRM RESTful API, until this has been done.
+            </td>
         </tr>
         <tr>
             <td><code>NO_INTERNET_PERMISSION</code></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>MISSING_REQ_PARAM</code></td>
-            <td></td>
+            <td>
+                The SDK has no permission to connect to the Internet. The SDK won't be able to report any data to the PlayRM RESTful API. 
+                Check your manifest file permissions to fix this issue.
+            </td>
         </tr>
         <tr>
             <td><code>FAIL_UNKNOWN</code></td>
-            <td></td>
+            <td>
+                An unknown exception occurred.
+            </td>
         </tr>
     </tbody>
 </table>
@@ -149,7 +158,7 @@ public class FirstGameActivity extends Activity {
     //...
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -183,17 +192,35 @@ public class NextGameActivity extends Activity {
     //...
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         //other init code for your game activity
         PlaynomicsSession.switchActivity(this);
     }
-    
     //...
 }
 ```
+
+### Stopping a Player Session
+
+When the application is being shutdown, you need to explicitally `stop` the PlayRM Session. `PlaynomicsSession.stop` should only be called in primary, long-running `Activity` of your game. You should call this in the `onDestroy` event handler.
+
+```java
+
+
+public class FirstGameActivity extends Activity {
+    //...
+    @Override
+    protected void onDestroy(){
+        PlaynomicsSession.stop();
+    }s
+    //...
+}
+
+```
+
 
 ## Demographics and Install Attribution
 
@@ -579,7 +606,7 @@ currencyCategories[1]  = CurrencyCategory.Real;
 
 APIResult result = PlaynomicsSession.transaction(transactionId, 
                         null,
-                        1, 
+                        0, 
                         TransactionType.CurrencyConvert, 
                         null,
                         currencyTypes, 
@@ -640,7 +667,7 @@ currencyCategories[1]  = CurrencyCategory.Virtual;
 
 APIResult result = PlaynomicsSession.transaction(transactionId, 
                         null,
-                        1, 
+                        0, 
                         TransactionType.CurrencyConvert, 
                         null,
                         currencyTypes, 
