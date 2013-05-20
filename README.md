@@ -24,7 +24,7 @@ Outline
     * [SDK Integration](#sdk-integration)
     * [Using Code Callbacks](#using-code-callbacks)
 * [Support Issues](#support-issues)
-
+* [Change Log](#change-log)
 
 Basic Integration
 =================
@@ -1228,3 +1228,13 @@ The related messages would be configured in the Control Panel to use this callba
 Support Issues
 ==============
 If you have any questions or issues, please contact <a href="mailto:support@playnomics.com">support@playnomics.com</a>.
+
+Change Log
+==========
+Version 3
+* Support for internal messaging
+* Added milestone module
+
+Version 2
+* First release
+
