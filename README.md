@@ -1231,10 +1231,10 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
-Version 3
+#### Version 3
 * Support for internal messaging
 * Added milestone module
 
-Version 2
+#### Version 2
 * First release
 
