@@ -10,6 +10,8 @@ Outline
     * [Installing the SDK](#installing-the-sdk)
         * [Interacting with PlayRM in Your Game](interacting-with-playrm-in-your-game)
         * [Starting a Player Session](#starting-a-player-session)
+        * [Handling Multiple Activities](#handling-multiple-activities)
+        * [Stopping a Player Session](#stopping-a-player-session)
     * [Demographics and Install Attribution](#demographics-and-install-attribution)
     * [Monetization](#monetization)
         * [Purchases of In-Game Currency with Real Currency](#purchases-of-in-game-currency-with-real-currency)
