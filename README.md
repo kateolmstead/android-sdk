@@ -1238,3 +1238,4 @@ Change Log
 #### Version 2
 * First release
 
+View version tags <a href="https://github.com/playnomics/android-sdk/tags">here</a>
