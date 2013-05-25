@@ -34,7 +34,7 @@ You can download the SDK by forking this repo or downloading the archived files.
 
 Add the JAR to your Android application build path. This example is for Eclipse.
 
-<img src="http://integatrion.playnomics.com/img/android/eclipse-import.png"/>
+<img src="http://integration.playnomics.com/img/android/eclipse-import.png"/>
 
 Make sure the JAR file is included in your Export.
 
