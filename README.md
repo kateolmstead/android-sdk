@@ -19,6 +19,8 @@ Outline
         * [Purchases of Items with Premium Currency](#purchases-of-items-with-premium-currency)
     * [Invitations and Virality](#invitations-and-virality)
     * [Custom Event Tracking](#custom-event-tracking)
+    * [Validate Integration](#validate-integration)
+    * [Switch SDK to Production Mode](#switch-sdk-to-production-mode)
 * [Messaging Integration](#messaging-integration)
     * [Setting up a Frame](#setting-up-a-frame)
     * [SDK Integration](#sdk-integration)
@@ -145,7 +147,7 @@ APIResult start(Activity activity, Long applicationId);
 If you do choose to provide a `<USER-ID>`, this value should be persistent, anonymized, and unique to each player. This is typically discerned dynamically when a player starts the game. Some potential implementations:
 
 * An internal ID (such as a database auto-generated number).
-* A hash of the user’s email address.
+* A hash of the user's email address.
 
 **You cannot use the user's Facebook ID or any personally identifiable information (plain-text email, name, etc) for the `<USER-ID>`.**
 
@@ -167,6 +169,8 @@ public class FirstGameActivity extends Activity {
 
         //other init code for your game activity
         
+        PlaynomicsSession.setTestMode(true);
+        
         const Long appId = <APPID>;
         PlaynomicsSession.start(this, appId);
     }
@@ -175,7 +179,7 @@ public class FirstGameActivity extends Activity {
 }
 ```
 
-Once started, the SDK will automatically begin collecting basic user information (including geo-location) and engagement data.
+Once started, the SDK will automatically begin collecting basic user information (including geo-location) and engagement data in **test mode** (be sure to switch to [production mode](#switch-sdk-to-production-mode) before deploying your application).
 
 ### Handling Multiple Activities
 
@@ -359,7 +363,7 @@ APIResult userInfo(UserInfoType type,
 </table>
 
 
-Since PlayRM uses the game client’s IP address to determine geographic location, country and subdivision should be set to `null`.
+Since PlayRM uses the game client's IP address to determine geographic location, country and subdivision should be set to `null`.
 
 ```java
 
@@ -795,7 +799,7 @@ APIResult invitationResponse(long invitationId,
     </tbody>
 </table>
 
-Example calls for a player’s invitation and the recipient’s acceptance:
+Example calls for a player's invitation and the recipient's acceptance:
 
 ```java
 Long invitationId = 112345675;
@@ -861,6 +865,43 @@ PlaynomicsSession.milestone(milestoneTutorialId, "TUTORIAL");
 long milestoneCustom2Id = rand.nextLong();
 PlaynomicsSession.milestone(milestoneCustom2Id, "CUSTOM2");
 ```
+## Validate Integration
+After configuring your selected PlayRM modules, you should verify your application's correct integration with the self-check validation service.
+
+Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/validation/<APPID>`**
+
+You can now see the most recent event data sent by the SDK, with any errors flagged. Visit the <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
+
+We strongly recommend running the self-check validator before deploying your newly integrated application to production.
+
+## Switch SDK to Production Mode
+Once you have [validated](#validate-integration) your integration, switch the SDK from **test** to **production** mode by simply calling `PlaynomicsSession.setTestMode(false)` (or by removing/commenting out the call entirely) in the initialization block:
+
+```java
+
+import android.app.Activity;
+import com.playnomics.playrm.*;
+
+public class FirstGameActivity extends Activity {
+    //...
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        //...
+        
+        PlaynomicsSession.setTestMode(false);
+        
+        const Long appId = <APPID>;
+        PlaynomicsSession.start(this, appId);
+    }
+
+    //...
+}
+```
+
+If you ever wish to test or troubleshoot your integration later on, simply set the test mode back to `true` and revisit the self-check validation tool for your application:
+
+**`https://controlpanel.playnomics.com/validation/<APPID>`**
 
 Messaging Integration
 =====================
