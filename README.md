@@ -845,7 +845,7 @@ APIResult milestone(long milestoneId,
             <td><code>andName</code></td>
             <td>String</td>
             <td>
-                The name of the milestone, which should be "TUTORIAL" or "CUSTOMn", where n is 1 through 5.
+                The name of the milestone, which should be "CUSTOMn", where n is 1 through 5.
                 The name is case-sensitive.
             </td>
         </tr>
@@ -857,13 +857,9 @@ Example client-side calls for a player reaching a milestone, with generated IDs:
 ```java
 Random rand = new Random();
 
-//when the player completes the tutorial
-long milestoneTutorialId = rand.nextLong();
-PlaynomicsSession.milestone(milestoneTutorialId, "TUTORIAL");
-
-//when milestone CUSTOM2 is reached
-long milestoneCustom2Id = rand.nextLong();
-PlaynomicsSession.milestone(milestoneCustom2Id, "CUSTOM2");
+//when milestone CUSTOM1 is reached
+long milestoneCustom1Id = rand.nextLong();
+PlaynomicsSession.milestone(milestoneCustom1Id, "CUSTOM1");
 ```
 ## Validate Integration
 After configuring your selected PlayRM modules, you should verify your application's correct integration with the self-check validation service.
