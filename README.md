@@ -22,7 +22,6 @@ Outline
     * [Validate Integration](#validate-integration)
     * [Switch SDK to Production Mode](#switch-sdk-to-production-mode)
 * [Messaging Integration](#messaging-integration)
-    * [Setting up a Frame](#setting-up-a-frame)
     * [SDK Integration](#sdk-integration)
     * [Using Code Callbacks](#using-code-callbacks)
 * [Support Issues](#support-issues)
