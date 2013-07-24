@@ -1326,6 +1326,10 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 3.0.1
+* Bug fixes for reporting the device ID
+* Performance improvements
+
 #### Version 3
 * Support for internal messaging
 * Added milestone module
