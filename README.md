@@ -250,11 +250,8 @@ PlayRM is currently operating in test mode. Be sure you switch to [production mo
 </ul>
 </li>
 <ul>
-<li><a href="#push-notfications">Push Notifications</a></li>
-</ul>
-<ul>
 <li><a href="#support-issues">Support Issues</a></li>
-<li><a href="#change-log"> Change Log</a></li>
+<li><a href="#change-log">Change Log</a></li>
 </ul>
 </div>
 
