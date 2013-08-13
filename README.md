@@ -1042,7 +1042,9 @@ Frame initWithFrameID(String frameId, Activity context, FrameDelegate frameDeleg
         <tr>
             <td><code>frameDelegate</code></td>
             <td>FrameDelegate</td>
-            <td></td>
+            <td>
+                Processes rich data callbacks, see <a href="#using-rich-data-callbacks">Using Rich Data Callbacks</a>
+            </td>
         </tr>
     </tbody>
 </table>
