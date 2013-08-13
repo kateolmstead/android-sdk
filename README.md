@@ -1320,7 +1320,7 @@ In the following example, we wish to generate third-party revenue from players u
                 Priority
             </th>
             <th>
-                Code Callback
+                Callback Behavior
             </th>
             <th>
                 Creative
