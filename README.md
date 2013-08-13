@@ -1004,7 +1004,7 @@ Frame initWithFrameID(String frameId, Activity activity);
         <tr>
             <td><code>frameId</code></td>
             <td>String</td>
-            <td>Unique identifier for the frame, the <code><PLAYRM-FRAME-ID></code></td>
+            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
             <td><code>context</code></td>
@@ -1032,7 +1032,7 @@ Frame initWithFrameID(String frameId, Activity context, FrameDelegate frameDeleg
         <tr>
             <td><code>frameId</code></td>
             <td>string</td>
-            <td>Unique identifier for the frame, the <code><PLAYRM-FRAME-ID></code></td>
+            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
             <td><code>context</code></td>
