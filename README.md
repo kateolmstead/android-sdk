@@ -246,7 +246,7 @@ PlayRM is currently operating in test mode. Be sure you switch to [production mo
 <a href="#messaging-integration">Messaging Integration</a>
 <ul>
 <li><a href="#sdk-integration">SDK Integration</a></li>
-<li><a href="#enabling-code-callbacks">Enabling Code Callbacks</a></li>
+<li><a href="#using-rich-data-callbacks">Using Rich Data Callbacks</a></li>
 </ul>
 </li>
 <ul>
@@ -254,7 +254,7 @@ PlayRM is currently operating in test mode. Be sure you switch to [production mo
 </ul>
 <ul>
 <li><a href="#support-issues">Support Issues</a></li>
-<li><a href="#change-log>"> Change Log</a></li>
+<li><a href="#change-log"> Change Log</a></li>
 </ul>
 </div>
 
@@ -1191,8 +1191,7 @@ And then attaching this AwardFrameDelegate class to the frame shown in an activi
 
 
 ```java
-public class GameActivity implements Activity
-{
+public class GameActivity extends Activity{
     @Override
     protected void onCreate(){
         //PlaynomicsSession.start or PlaynomicsSession.switchActivity called before this step
