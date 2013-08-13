@@ -13,9 +13,6 @@ Note, SDK is intended for working with Android games built in Java, if you're us
 
 If you want to deploy your game to multiple platforms (eg: Android and the Unity Web player), you'll need to create a separate Playnomics Applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, message frames and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your game screen size.
 
-
-
-
 Basic Integration
 =================
 
@@ -979,11 +976,10 @@ import com.playnomics.playrm.PlaynomicsSession;
 In the `onCreate` event handler of the `Activity`, you'll need to attach it to the Messaging class.
 
 ```java
-
 import com.playnomics.playrm.Frame;
 import com.playnomics.playrm.Frame.DisplayResult;
 import com.playnomics.playrm.Messaging;
-import com.playnomics.playrm.PlaynomicsSession;s
+import com.playnomics.playrm.PlaynomicsSession;
 
 public class MessagingActivity extends Activity{
     
@@ -1014,9 +1010,42 @@ Frame initWithFrameID(String frameId, Activity activity);
             <td>Unique identifier for the frame, the <code><PLAYRM-FRAME-ID></code></td>
         </tr>
         <tr>
-            <td><code>frameId</code></td>
+            <td><code>context</code></td>
             <td>Activity</td>
             <td>The activity your frame is running in.</td>
+        </tr>
+    </tbody>
+</table>
+
+Optionally, associate an implementation of FrameDelegate to process rich data callbacks. See [Using Rich Data Callbacks](#using-rich-data-callbacks) for more information.
+
+```java
+Frame initWithFrameID(String frameId, Activity context, FrameDelegate frameDelegate);
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>frameId<code></td>
+            <td>string</td>
+            <td>Unique identifier for the frame, the <code><PLAYRM-FRAME-ID></code></td>
+        </tr>
+        <tr>
+            <td><code>context</code></td>
+            <td>Activity</td>
+            <td>The activity your frame is running in.</td>
+        </tr>
+        <tr>
+            <td><code>frameDelegate<code></td>
+            <td>FrameDelegate</td>
+            <td></td>
         </tr>
     </tbody>
 </table>
@@ -1031,7 +1060,7 @@ In practice, a frame can be loaded in a variety of ways.
 import com.playnomics.playrm.Frame;
 import com.playnomics.playrm.Frame.DisplayResult;
 import com.playnomics.playrm.Messaging;
-import com.playnomics.playrm.PlaynomicsSession;s
+import com.playnomics.playrm.PlaynomicsSession;
 
 public class MessagingActivity extends Activity{
     
@@ -1044,28 +1073,32 @@ public class MessagingActivity extends Activity{
 
         String frameId = "<PLAYRM-FRAME-ID>"
         this.frame = Messaging.initWithFrameID(frameId, this);
-        //enable code callbacks
-        this.frame.setEnableAdCode(true);
     }
 }
 ```
 
-## Using Code Callbacks
+
+## Using Rich Data Callbacks
 
 Depending on your configuration, a variety of actions can take place when a frame's message is pressed or clicked:
 
-* Redirect the player to a web URL in Safari
-* Fire a code callback in your game
-* Or in the simplest case, just close, provided that the **Close Button** has been configured correctly.
+* Redirect the player to a web URL in the platform's browser application
+* Firing a Rich Data callback in your game
+* Or in the simplest case, just close the frame, provided that the **Close Button** has been configured correctly.
 
-All of this setup, takes place at the the time of the messaging campaign configuration. However, all code callbacks need to be configured before PlayRM can interact with them. The SDK uses reflection to find a public method on the `Activity` that you registered your frame with. This method serves as the callback.
+Rich Data is a JSON message that you associate with your message creative. When the player presses the message, the PlayRM SDK bubbles-up the associated JSON object to an implementation of the interface, `FrameDelegate` associated with the frame.
 
-* The callback cannot accept any parameters.
-* It should return `void`.
+```java
+public interface FrameDelegate {
+    void onClick(org.json.JSONObject jsonData);
+}
+```
 
-**The code callback will not fire if the Close button is pressed.**
+The actual contents of your message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your game. 
 
-Here are three common use cases for frames and a messaging campaigns:
+**The Rich Data callback will not fire if the Close button is pressed.**
+
+Here are three common use cases for frames and messaging campaigns:
 
 * [Game Start Frame](#game-start-frame)
 * [Event Driven Frame - Open the Store](#event-driven-frame-open-the-store) for instance, when the player is running low on premium currency
@@ -1132,46 +1165,84 @@ In this use-case, we want to configure a frame that is always shown to players w
     </tbody>
 </table>
 
+We want our game to process messages for awarding items to players. We process this data with an implementation of the `FrameDelegate` interface.
+
+
 ```java
-import com.playnomics.playrm.Frame;
-import com.playnomics.playrm.Frame.DisplayResult;
-import com.playnomics.playrm.Messaging;
-import com.playnomics.playrm.PlaynomicsSession;s
+public class AwardFrameDelegate implements FrameDelegate {
 
-public class MessagingActivity extends Activity{
-    
-    private Frame frame;
+    public void onClick(org.json.JSONObject data){
 
-    @Override
-    protected void onCreate(){
-        //PlaynomicsSession.start or PlaynomicsSession.switchActivity called before this step
-        Messaging.setup(this);
+        if(!data.isNull("type") && data.getString("type").equals("award")){
+            if(!dataDict.isNull("award")){
 
-        String frameId = "<PLAYRM-FRAME-ID>"
-        this.frame = Messaging.initWithFrameID(frameId, this);
-        //enable code callbacks
-        this.frame.setEnableAdCode(true);
-    }
+                String item = data.getJSONObject("award").getString("item");
+                int quantity = data.getJSONObject("award").getInt("quantity");
 
-    public void grant10MonsterBucks(){
-        //grant 10 MonsterBucks
-    }
-
-    public void grant50MonsterBucks(){
-        //grant 50 MonsterBucks
-    }
-
-    public void grantBazooka(){
-        //grant a bazooka
+                //call your own inventory object
+                Inventory.addItem(item, quanity);
+            }
+        }
     }
 }
 ```
 
-The related messages would be configured in the Control Panel to use this callback by placing this in the **Target URL** for each message :
+And then attaching this AwardFrameDelegate class to the frame shown in an activity:
 
-* **At-Risk Message** : `pnx://grant50MonsterBucks`
-* **Lapsed 7 or more days** : `pnx://grant10MonsterBucks`
-* **Default** : `pnx://grantBazooka`
+
+```java
+public class GameActivity implements Activity
+{
+    @Override
+    protected void onCreate(){
+        //PlaynomicsSession.start or PlaynomicsSession.switchActivity called before this step
+        
+        Messaging.setup(this);
+
+        String frameId = "<PLAYRM-FRAME-ID>"
+
+        FrameDelegate frameDelegate = new AwardFrameDelegate();
+        this.frame = Messaging.initWithFrameID(frameId, this, frameDelegate);
+    }
+}
+```
+The related messages would be configured in the Control Panel to use this callback by placing this in the **Target Data** for each message:
+
+Grant 10 Monster Bucks
+```json
+{
+    "type" : "award",
+    "award" : 
+    {
+        "item" : "MonsterBucks",
+        "quantity" : 10
+    }
+}
+```
+
+Grant 50 Monster Bucks
+```json
+{
+    "type" : "award",
+    "award" : 
+    {
+        "item" : "MonsterBucks",
+        "quantity" : 50
+    }
+}
+```
+
+Grant Bazooka
+```json
+{
+    "type" : "award",
+    "award" :
+    {
+        "item" : "Bazooka",
+        "quantity" : 1
+    }
+}
+```
 
 ### Event Driven Frame - Open the Store
 
@@ -1212,34 +1283,34 @@ In particular one event, for examle, a player may deplete their premium currency
     </tbody>
 </table>
 
-```java
-import com.playnomics.playrm.Frame;
-import com.playnomics.playrm.Frame.DisplayResult;
-import com.playnomics.playrm.Messaging;
-import com.playnomics.playrm.PlaynomicsSession;s
+Related delegate callback code:
 
-public class MessagingActivity extends Activity{
-    
-    private Frame frame;
+```csharp
+using UnityEngine;
 
-    @Override
-    protected void onCreate(){
-        //PlaynomicsSession.start or PlaynomicsSession.switchActivity called before this step
-        Messaging.setup(this);
+public class StoreFrameDelegate implements FrameDelegate {
 
-        String frameId = "<PLAYRM-FRAME-ID>"
-        this.frame = Messaging.initWithFrameID(frameId, this);
-        //enable code callbacks
-        this.frame.setEnableAdCode(true);
-    }
+    public void onClick(org.json.JSONObject data){
 
-    public void openStore(){
-        //open the store
+        if(!data.isNull("type") && data.getString("type").Equals("action")){
+            if(!data.isNull("actionType") && data.getString("actionType").equals("openStore"))
+            {
+                //opens the store in our game
+                Store.open();
+            }
+        }
     }
 }
 ```
 
-The Default message would be configured in the Control Panel to use this callback by placing this in the **Target URL** for the message : `pnx://ClickHandler.openStore`.
+The Default message would be configured in the Control Panel to use this callback by placing this in the **Target Data** for the message :
+
+```json
+{
+    "type" : "action",
+    "action" : "openStore"
+}
+```
 
 ### Event Driven Frame - Level Completion
 
@@ -1288,37 +1359,21 @@ In the following example, we wish to generate third-party revenue from players u
     </tbody>
 </table>
 
-```java
-import com.playnomics.playrm.Frame;
-import com.playnomics.playrm.Frame.DisplayResult;
-import com.playnomics.playrm.Messaging;
-import com.playnomics.playrm.PlaynomicsSession;s
+This another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
 
-public class MessagingActivity extends Activity{
-    
-    private Frame frame;
+* **Non-monetizers, in their 5th day of game play**, a Target URL: `HTTP URL for Third Party Ad`
+* **Default**, Target Data:
 
-    @Override
-    protected void onCreate(){
-        //PlaynomicsSession.start or PlaynomicsSession.switchActivity called before this step
-        Messaging.setup(this);
-
-        String frameId = "<PLAYRM-FRAME-ID>"
-        this.frame = Messaging.initWithFrameID(frameId, this);
-        //enable code callbacks
-        this.frame.setEnableAdCode(true);
-    }
-
-    public void grantMana(){
-        //grantMana
+```json
+{
+    "type" : "award",
+    "award" :
+    {
+        "item" : "Mana",
+        "quantity" : 20
     }
 }
 ```
-
-The related messages would be configured in the Control Panel to use this callback by placing this in the **Target URL** for each message :
-
-* **Non-monetizers, in their 5th day of game play** : `HTTP URL for Third Party Ad`
-* **Default** : `pnx://grantMana`
 
 Support Issues
 ==============
@@ -1326,6 +1381,9 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 3.1
+* Added support for Messaging with Rich Data Callbacks.
+
 #### Version 3.0.1
 * Bug fixes for reporting the device ID
 * Performance improvements
