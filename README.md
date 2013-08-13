@@ -1177,7 +1177,7 @@ public class AwardFrameDelegate implements FrameDelegate {
                 int quantity = data.getJSONObject("award").getInt("quantity");
 
                 //call your own inventory object
-                Inventory.addItem(item, quanity);
+                Inventory.addItem(item, quantity);
             }
         }
     }
@@ -1282,8 +1282,6 @@ In particular one event, for examle, a player may deplete their premium currency
 Related delegate callback code:
 
 ```csharp
-using UnityEngine;
-
 public class StoreFrameDelegate implements FrameDelegate {
 
     public void onClick(org.json.JSONObject data){
