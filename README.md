@@ -1172,7 +1172,9 @@ public class AwardFrameDelegate implements FrameDelegate {
 
     public void onClick(org.json.JSONObject data){
 
-        if(!data.isNull("type") && data.getString("type").equals("award")){
+        if(!data.isNull("type") && 
+            data.getString("type").equals("award")){
+            
             if(!dataDict.isNull("award")){
 
                 String item = data.getJSONObject("award").getString("item");
@@ -1181,6 +1183,7 @@ public class AwardFrameDelegate implements FrameDelegate {
                 //call your own inventory object
                 Inventory.addItem(item, quantity);
             }
+
         }
     }
 }
@@ -1288,8 +1291,11 @@ public class StoreFrameDelegate implements FrameDelegate {
 
     public void onClick(org.json.JSONObject data){
 
-        if(!data.isNull("type") && data.getString("type").Equals("action")){
-            if(!data.isNull("actionType") && data.getString("actionType").equals("openStore"))
+        if(!data.isNull("type") && 
+            data.getString("type").Equals("action")){
+            
+            if(!data.isNull("actionType") && 
+                data.getString("actionType").equals("openStore"))
             {
                 //opens the store in our game
                 Store.open();
