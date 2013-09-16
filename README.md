@@ -916,7 +916,7 @@ PlaynomicsSession.milestone(milestoneCustom1Id, "CUSTOM1");
 ## Validate Integration
 After configuring your selected PlayRM modules, you should verify your application's correct integration with the self-check validation service.
 
-Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/validation/<APPID>`**
+Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
 
 You can now see the most recent event data sent by the SDK, with any errors flagged. Visit the <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
 
@@ -949,7 +949,7 @@ public class FirstGameActivity extends Activity {
 
 If you ever wish to test or troubleshoot your integration later on, simply set the test mode back to `true` and revisit the self-check validation tool for your application:
 
-**`https://controlpanel.playnomics.com/validation/<APPID>`**
+**`https://controlpanel.playnomics.com/applications/<APPID>`**
 
 Messaging Integration
 =====================
