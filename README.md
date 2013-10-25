@@ -1,17 +1,17 @@
 Playnomics PlayRM Android SDK Integration Guide
 =============================================
-If you're new to PlayRM and/or don't have a PlayRM account and would like to get started using PlayRM please visit   <a href="https://controlpanel.playnomics.com/signup">https://controlpanel.playnomics.com/signup</a>   to sign up. Soon after creating an account you will receive a registration confirmation email permitting you access to your PlayRM control panel.
+If you're new to PlayRM and/or don't have a PlayRM account and would like to get started using PlayRM please visit   <a href="https://controlpanel.playnomics.com/signup">https://controlpanel.playnomics.com/signup</a> to sign up. Soon after creating an account you will receive a registration confirmation email permitting you access to your PlayRM control panel.
 
-Within the control panel, click the <strong>applications</strong> tab and add your game. Upon doing so, you will recieve an <strong>Application ID</strong> and an <strong>API KEY</strong>. These two components will enable you to begin the integration process.
+Within the control panel, click the <strong>applications</strong> tab and add your app. Upon doing so, you will receive an <strong>Application ID</strong> and an <strong>API KEY</strong>. These two components will enable you to begin the integration process.
 
 Our integration has been optimized to be as straight forward and user friendly as possible. If you're feeling unsure or would like better understand the order the process before beginning integration, please take a moment to check out the <a href="http://integration.playnomics.com/technical/#integration-getting-started">getting started</a> page. Here you can find an overview of our integration process, and platform specific features, to help you better understand the PlayRM integration process.
 
-Note, SDK is intended for working with Android games built in Java, if you're using Unity and deploying your game to Android, please refer to the <a target="_blank" href="https://github.com/playnomics/unity-sdk#playnomics-playrm-unity-sdk-integration-guide">PlayRM Unity SDK</a>. This SDK is only currently compatible with the Google's verison of Android and doesn't support open-source Android implementations like the Amazon Kindle.
+Note, SDK is intended for working with Android apps built in Java, if you're using Unity and deploying your app to Android, please refer to the <a target="_blank" href="https://github.com/playnomics/unity-sdk#playnomics-playrm-unity-sdk-integration-guide">PlayRM Unity SDK</a>. This SDK is only currently compatible with the Google's venison of Android and doesn't support open-source Android implementations like the Amazon Kindle.
 
 
-## Considerations for Cross-Platform Games
+## Considerations for Cross-Platform Applications
 
-If you want to deploy your game to multiple platforms (eg: Android and the Unity Web player), you'll need to create a separate Playnomics Applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, message frames and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your game screen size.
+If you want to deploy your app to multiple platforms (eg: Android and the Unity Web player), you'll need to create a separate Playnomics Applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, message frames and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your app screen size.
 
 Basic Integration
 =================
@@ -31,7 +31,7 @@ Add the following permissions to your Android application manifest file if they 
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-### Interacting with PlayRM in Your Game
+### Interacting with PlayRM in Your Application
 
 All session-related calls are made through a `static` class `PlaynomicsSession` while all messaging-related calls are made through a `static` class `Messaging`. To work with any of these classes, you need to import the appropriate package file:
 
@@ -112,23 +112,23 @@ All public methods, except for messaging specific calls, return an enumeration `
 
 **You always need to start a session before making any other SDK calls.**
 
-### Starting a Player Session
+### Starting a User Session
 
-To start collecting behavior data, you need to initialize the PlayRM session. In the first `Activity` of your game, start the PlayRM Session in the `didFinishLaunchingWithOptions` method.
+To start collecting behavior data, you need to initialize the PlayRM session. In the first `Activity` of your application, start the PlayRM Session in the `didFinishLaunchingWithOptions` method.
 
-You can either provide a dynamic `<USER-ID>` to identify each player:
+You can either provide a dynamic `<USER-ID>` to identify each user:
 
 ```java
 APIResult start(Activity activity, Long applicationId,  String userId);
 ```
 
-or have PlayRM, generate a *best-effort* unique-identifier for the player:
+or have PlayRM, generate a *best-effort* unique-identifier for the user:
 
 ```java
 APIResult start(Activity activity, Long applicationId);
 ```
 
-If you do choose to provide a `<USER-ID>`, this value should be persistent, anonymized, and unique to each player. This is typically discerned dynamically when a player starts the game. Some potential implementations:
+If you do choose to provide a `<USER-ID>`, this value should be persistent, anonymized, and unique to each user. This is typically discerned dynamically when a user starts the application. Some potential implementations:
 
 * An internal ID (such as a database auto-generated number).
 * A hash of the user's email address.
@@ -151,7 +151,7 @@ public class FirstGameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        //other init code for your game activity
+        //other init code for your app activity
         
         PlaynomicsSession.setTestMode(true);
         
@@ -167,7 +167,7 @@ Once started, the SDK will automatically begin collecting basic user information
 
 ### Handling Multiple Activities
 
-If your game has multiple `Activity` classes, you need to notify PlayRM that the activity context has changed by calling `switchActivity`:
+If your app has multiple `Activity` classes, you need to notify PlayRM that the activity context has changed by calling `switchActivity`:
 
 ```java
 APIResult switchActivity(Activity activity);
@@ -186,16 +186,16 @@ public class NextGameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        //other init code for your game activity
+        //other init code for your app activity
         PlaynomicsSession.switchActivity(this);
     }
     //...
 }
 ```
 
-### Stopping a Player Session
+### Stopping a User Session
 
-When the application is being shutdown, you need to explicitally `stop` the PlayRM Session. `PlaynomicsSession.stop` should only be called in primary, long-running `Activity` of your game. You should call this in the `onDestroy` event handler.
+When the application is being shutdown, you need to explicitly `stop` the PlayRM Session. `PlaynomicsSession.stop` should only be called in primary, long-running `Activity` of your app. You should call this in the `onDestroy` event handler.
 
 ```java
 
@@ -212,10 +212,10 @@ public class FirstGameActivity extends Activity {
 ```
 
 
-Congratulations! You've completed our basic integration. You will now be able to track engagement behaviors (having incorporated the Engagement Module) from the PlayRM dashboard. At this point we recomend that you use our integration validation tool to test your integration of our SDK in order insure that it has been properly incorporated in your game. 
+Congratulations! You've completed our basic integration. You will now be able to track engagement behaviors (having incorporated the Engagement Module) from the PlayRM dashboard. At this point we recommend that you use our integration validation tool to test your integration of our SDK in order insure that it has been properly incorporated in your app. 
 
 
-PlayRM is currently operating in test mode. Be sure you switch to [production mode](#switch-sdk-to-production-mode), by implementing the code call outlined in our Basic Integration before deploying your game on the web or in an app store.
+PlayRM is currently operating in test mode. Be sure you switch to [production mode](#switch-sdk-to-production-mode), by implementing the code call outlined in our Basic Integration before deploying your app on the web or in an app store.
 
 
 # Full Integration
@@ -231,12 +231,11 @@ PlayRM is currently operating in test mode. Be sure you switch to [production mo
 <a href="#monetization">Monetization</a>
 
 <ul>
-<li><a href="#purchases-of-in-game-currency-with-real-currency">Purchases of In-Game Currency with Real Currency</a></li>
+<li><a href="#purchases-of-in-app-currency-with-real-currency">Purchases of In-App Currency with Real Currency</a></li>
 <li><a href="#purchases-of-items-with-real-currency">Purchases of Items with Real Currency</a></li>
 <li><a href="#purchases-of-items-with-premium-currency">Purchases of Items with Premium Currency</a></li>
 </ul>
 </li>
-<li><a href="#invitations-and-virality">Invitations and Virality</a></li>
 <li><a href="#custom-event-tracking">Custom Event Tracking</a></li>
 <li><a href="#validate-integration">Validate Integration</a></li>
 <li><a href="#switch-sdk-to-production-mode">Switch SDK to Production Mode</a></li>
@@ -260,7 +259,7 @@ If you're reading this it's likely that you've integrated our SDK and are intere
 
 The index on the right provides a holistic overview of the <strong>full integration</strong> process. From it, you can jump to specific points in this document depending on what you're looking to learn and do.
 
-To clarify where you are in the timeline of our integration process, you've completed our basic integration. Doing so will enable you to track engagement behaviors from the PlayRM dashboard (having incorporated the Engagement Module). The following documentation will provides succint information on how to incorporate additional and more in-depth segmentation functionality by integrating any, or all of the following into your game:
+To clarify where you are in the timeline of our integration process, you've completed our basic integration. Doing so will enable you to track engagement behaviors from the PlayRM dashboard (having incorporated the Engagement Module). The following documentation will provide succinct information on how to incorporate additional and more in-depth segmentation functionality by integrating any, or all of the following into your application:
 
 
 <ul>
@@ -270,10 +269,7 @@ To clarify where you are in the timeline of our integration process, you've comp
 <li><strong>Monetization Module:</strong> - tracks various monetization events and transactions</li>
 
 
-<li><strong>Virality Module:</strong> - tracks the social activities of users</li>
-
-
-<li><strong>Milestone Module:</strong> - tracks significant player events customized to your game</li>
+<li><strong>Milestone Module:</strong> - tracks significant user events customized to your app</li>
 </ul>
 
 
@@ -337,13 +333,13 @@ If any of the parameters are not available, you should pass `null`.
         <tr>
             <td><code>birthday</code></td>
             <td>Date</td>
-            <td>A birthday for the player.</td>
+            <td>A birthday for the user.</td>
         </tr>
         <tr>
             <td><code>source</code></td>
             <td>String</td>
             <td>
-                Source of the user, such as "FacebookAds", "UserReferral", "Playnomics", etc. These are only suggestions, any 16-character or shorter string is acceptable.
+                Source of the user, such as "FacebookAds", "UserReferral", "Playnomics", etc. These are only suggestions; any 16-character or shorter string is acceptable.
             </td>
         </tr>
         <tr>
@@ -357,7 +353,7 @@ If any of the parameters are not available, you should pass `null`.
             <td><code>installTime</code></td>
             <td>Date</td>
             <td>
-                When the player originally installed the game.
+                When the user originally installed the app.
             </td>
         </tr>
     </tbody>
@@ -415,7 +411,7 @@ APIResult userInfo(UserInfoType type,
 </table>
 
 
-Since PlayRM uses the game client's IP address to determine geographic location, country and subdivision should be set to `null`.
+Since PlayRM uses the application client's IP address to determine geographic location, country and subdivision should be set to `null`.
 
 ```java
 
@@ -444,13 +440,13 @@ public class FirstGameActivity extends Activity {
 ```
 ## Monetization
 
-PlayRM provides a flexible interface for tracking monetization events. This module should be called every time a player triggers a monetization event.
+PlayRM provides a flexible interface for tracking monetization events. This module should be called every time a user triggers a monetization event.
 
 This event tracks users that have monetized and the amount they have spent in total, *real* currency:
 * FBC (Facebook Credits)
 * USD (US Dollars)
 
-or an in-game, *virtual* currency.
+or an in-app, *virtual* currency.
 
 This outlines how currencies are described in PlayRM Android
 
@@ -513,7 +509,7 @@ APIResult transaction(long transactionId,
             <td><code>transactionId</code></td>
             <td>signed long long</td>
             <td>
-                A unique identifier for this transaction. If you don't have a transaction ID from payments system, you can genenate large random number.
+                A unique identifier for this transaction. If you don't have a transaction ID from payments system, you can generate large random number.
             </td>
         </tr>
         <tr>
@@ -533,31 +529,31 @@ APIResult transaction(long transactionId,
                 The type of transaction occurring:
                 <ul>
                     <li>
-                        <strong>BuyItem</strong>: A purchase of virtual item. The <code>quantity</code> is added to the player's inventory</li>
+                        <strong>BuyItem</strong>: A purchase of virtual item. The <code>quantity</code> is added to the user’s inventory</li>
                     <li>
-                        <strong>SellItem</strong>: A sale of a virtual item to another player. The item is removed from the player's inventory. Note: a sale of an item will result in two events with the same <code>transactionId</code>, one for the sale with type SellItem, and one for the receipt of that sale, with type BuyItem.
+                        <strong>SellItem</strong>: A sale of a virtual item to another user. The item is removed from the user’s inventory. Note: a sale of an item will result in two events with the same <code>transactionId</code>, one for the sale with type SellItem, and one for the receipt of that sale, with type BuyItem.
                     </li>
                     <li>
-                        <strong>ReturnItem</strong>: A return of a virtual item to the store. The item is removed from the player's inventory
+                        <strong>ReturnItem</strong>: A return of a virtual item to the store. The item is removed from the user’s inventory
                     </li>
                     <li><strong>BuyService</strong>: A purchase of a service, e.g., VIP membership </li>
-                    <li><strong>SellService</strong>: The sale of a service to another player</li>
+                    <li><strong>SellService</strong>: The sale of a service to another user</li>
                     <li><strong>ReturnService</strong>: The return of a service</li>
                     <li>
                         <strong>CurrencyConvert</strong>: A conversion of currency from one form to another, usually in the form of real currency (e.g., US dollars) to virtual currency.  If the type of a transaction is CurrencyConvert, then there should be at least 2 elements in the <code>currencyTypes</code>, <code>currencyValues</code>, and <code>currencyCategories</code> arrays
                     </li>
                     <li>
-                        <strong>Initial</strong>: An initial allocation of currency and/or virtual items to a new player
+                        <strong>Initial</strong>: An initial allocation of currency and/or virtual items to a new user
                     </li>
-                    <li><strong>Free</strong>: Free currency or item given to a player by the application</li>
+                    <li><strong>Free</strong>: Free currency or item given to a user by the application</li>
                     <li>
-                        <strong>Reward</strong>: Currency or virtual item given by the application as a reward for some action by the player
-                    </li>
-                    <li>
-                        <strong>GiftSend</strong>: A virtual item sent from one player to another. Note: a virtual gift should result in two transaction events with the same <code>transactionId</code>, one with the type GiftSend, and another with the type GiftReceive
+                        <strong>Reward</strong>: Currency or virtual item given by the application as a reward for some action by the user
                     </li>
                     <li>
-                        <strong>GiftReceive</strong>: A virtual good received by a player. See note for <strong>GiftSend</strong> type
+                        <strong>GiftSend</strong>: A virtual item sent from one user to another. Note: a virtual gift should result in two transaction events with the same <code>transactionId</code>, one with the type GiftSend, and another with the type GiftReceive
+                    </li>
+                    <li>
+                        <strong>GiftReceive</strong>: A virtual good received by a user. See note for <strong>GiftSend</strong> type
                      </li>
                 </ul>
             </td>
@@ -566,7 +562,7 @@ APIResult transaction(long transactionId,
             <td><code>otherUserId</code></td>
             <td>String</td>
             <td>
-               If applicable, the other user involved in the transaction. A contextual example is a player sending a gift to another player.
+               If applicable, the other user involved in the transaction. A contextual example is a user sending a gift to another user.
             </td>
         </tr>
         <tr>
@@ -635,16 +631,16 @@ APIResult transaction(long transactionId,
 All arguments are the same as the first method, except that the `currencyType`,`currencyValue`, and `currencyCategory` are singular. The `currencyCategory` is likely <strong>Virtual</strong>.
 
 We highlight three common use-cases below.
-* [Purchases of In-Game Currency with Real Currency](#purchases-of-in-game-currency-with-real-currency)
+* [Purchases of In-App Currency with Real Currency](#purchases-of-in-app-currency-with-real-currency)
 * [Purchases of Items with Real Currency](#purchases-of-items-with-real-currency)
-* [Purchases of Items with In-Game Currency](#purchases-of-items-with-in-game-currency)
+* [Purchases of Items with In-App Currency](#purchases-of-items-with-in-app-currency)
 
-### Purchases of In-Game Currency with Real Currency
+### Purchases of In-App Currency with Real Currency
 
-A very common monetization strategy is to incentivize players to purchase premium, in-game currency with real currency. PlayRM treats this like a currency exchange. This is one of the few cases where multiple currencies are used in a transaction (first implementation of `transactionWithId`. `itemId`, `quantity`, and `otherUserId` are left `null`.
+A very common monetization strategy is to incentivize users to purchase premium, in-app currency with real currency. PlayRM treats this like a currency exchange. This is one of the few cases where multiple currencies are used in a transaction (first implementation of `transactionWithId`. `itemId`, `quantity`, and `otherUserId` are left `null`.
 
 ```java
-//player purchases 500 MonsterBucks for 10 USD
+//user purchases 500 MonsterBucks for 10 USD
 
 String[] currencyTypes = new String[2];
 double[] currencyValues = new double[2];
@@ -652,7 +648,7 @@ CurrencyCategory[] currencyCategories = new CurrencyCategory[2];
 
 //notice that we're adding all data about each currency in order
 
-//in-game currency
+//in-app currency
 currencyTypes[0] = "MonsterBucks";
 currencyValues[0]= 500;
 currencyCategories[0]  = CurrencyCategory.Virtual;
@@ -675,7 +671,7 @@ APIResult result = PlaynomicsSession.transaction(transactionId,
 ### Purchases of Items with Real Currency
 
 ```java
-//player purchases a "Monster Trap" for $.99 USD
+//user purchases a "Monster Trap" for $.99 USD
 
 String trapItemId = "Monster Trap";
 double quantity = 1;
@@ -693,18 +689,18 @@ APIResult result =  PlaynomicsSession.transaction(transactionId,
 
 ### Purchases of Items with Premium Currency
 
-This event is used to segment monetized players (and potential future monetizers) by collecting information about how and when they spend their premium currency (an in-game currency that is primarily acquired using a *real* currency). This is one level of information deeper than the previous use-cases.
+This event is used to segment monetized users (and potential future monetizers) by collecting information about how and when they spend their premium currency (an in-app currency that is primarily acquired using a *real* currency). This is one level of information deeper than the previous use-cases.
 
 #### Currency Exchanges
 
-This is a continuation on the first currency exchange example. It showcases how to track each purchase of in-game *attention* currency (non-premium virtual currency) paid for with a *premium*:
+This is a continuation on the first currency exchange example. It showcases how to track each purchase of in-app *attention* currency (non-premium virtual currency) paid for with a *premium*:
 
 ```java
 
-//In this hypothetical, Energy is an attention currency that is earned over the lifetime of the game. 
-//They can also be purchased with the premium MonsterBucks that the player may have purchased earlier.
+//In this hypothetical, Energy is an attention currency that is earned over the lifetime of the app. 
+//They can also be purchased with the premium MonsterBucks that the user may have purchased earlier.
 
-//player buys 100 Mana with 10 MonsterBucks
+//user buys 100 Mana with 10 MonsterBucks
 
 String[] currencyTypes = new String[2];
 double[] currencyValues = new double[2];
@@ -737,7 +733,7 @@ APIResult result = PlaynomicsSession.transaction(transactionId,
 This is a continuation on the first item purchase example, except with premium currency.
 
 ```java
-//player buys 20 light armor, for 5 MonsterBucks
+//user buys 20 light armor, for 5 MonsterBucks
 
 double itemQuantity = 20;
 String itemId = "Light Armor";
@@ -755,123 +751,11 @@ APIResult result = PlaynomicsSession.transaction(transactionId,
                      CurrencyCategory.Virtual);
 ```
 
-## Invitations and Virality
-
-The virality module allows you to track a single invitation from one player to another (e.g., inviting friends to join a game).
-
-If multiple requests can be sent at the same time, a separate call should be made for each recipient.
-
-```objectivec
-APIResult invitationSent(long invitationId,
-                            String recipientUserId, 
-                            String recipientAddress, 
-                            String method);
-```
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>invitationId</code></td>
-            <td>long</td>
-            <td>
-                A unique 64-bit integer identifier for this invitation. 
-
-                If no identifier is available, this could be a hash/MD5/SHA1 of the sender's and neighbor's IDs concatenated. <strong>The resulting identifier can not be personally identifiable.</strong>
-            </td>
-        </tr>
-        <tr>
-            <td><code>recipientUserId</code></td>
-            <td>String</td>
-            <td>This can be a hash/MD5/SHA1 of the recipient's Facebook ID, their Facebook 3rd Party ID or an internal ID. It cannot be a personally identifiable ID.</td>
-        </tr>
-        <tr>
-            <td><code>recipientAddress</code></td>
-            <td>String</td>
-            <td>
-                An optional way to identify the recipient, for example the <strong>hashed email address</strong>. When using <code>recipientUserId</code> this can be <code>null</code>.
-            </td>
-        </tr>
-        <tr>
-            <td><code>method</code></td>
-            <td>String</td>
-            <td>
-                The method of the invitation request will include one of the following:
-                <ul>
-                    <li>facebookRequest</li>
-                    <li>email</li>
-                    <li>twitter</li>
-                </ul>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-You can then track each invitation response. IMPORTANT: you will need to pass the invitationId through the invitation link.
-
-```objectivec
-APIResult invitationResponse(long invitationId,
-                                String recipientUserId, 
-                                ResponseType response);
-```
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>invitationId</code></td>
-            <td>Long</td>
-            <td>The ID of the corresponding <code>invitationSent</code> event.</td>
-        </tr>
-        <tr>
-            <td><code>recipientUserId</code></td>
-            <td>String</td>
-            <td>The <code>recipientUserID</code> used in the corresponding <code>invitationSent</code> event.</td>
-        </tr>
-        <tr>
-            <td><code>responseType</code></td>
-            <td>ResponseType</td>
-            <td>
-                Currently the only response PlayRM tracks acceptance
-                <ul>
-                    <li>accepted</li>
-                </ul>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-Example calls for a player's invitation and the recipient's acceptance:
-
-```java
-Long invitationId = 112345675;
-String recipientUserId = "10000013";
-
-APIResult sentResult = PlaynomicsSession.invitationSentWithId(invitationId , recipientUserId,
-                                    null, null);
-
-//later on the recipient accepts the invitation
-
-APIResult responseResult = PlaynomicsSession.invitationResponseWithId(invitationId
-                                    recipientUserId,
-                                    ResponseType.accepted];
-```
-
 ## Custom Event Tracking
 
-Milestones may be defined in a number of ways. They may be defined at certain key gameplay points like, finishing a tutorial, or may they refer to other important milestones in a player's lifecycle. PlayRM, by default, supports up to five custom milestones.  Players can be segmented based on when and how many times they have achieved a particular milestone.
+Custom Events may be used in a number of ways.  They can be used to track certain key in-app events such as finishing a tutorial or receiving a high score. They may also be used to track other important lifecycle events such as level up, zone unlocked, etc.  PlayRM, by default, supports up to five custom events.  You can then use these custom events to create more targeted custom segments.
 
-Each time a player reaches a milestone, track it with this call:
+Each time a user completes a certain event, track it with this call:
 
 ```objectivec
 APIResult milestone(long milestoneId, 
@@ -890,26 +774,26 @@ APIResult milestone(long milestoneId,
             <td><code>milestoneId</code></td>
             <td>long</long>
             <td>
-                A unique 64-bit numeric identifier for this milestone occurrence.
+                A unique 64-bit numeric identifier for this custom event occurrence.
             </td>
         </tr>
         <tr>
             <td><code>andName</code></td>
             <td>String</td>
             <td>
-                The name of the milestone, which should be "CUSTOMn", where n is 1 through 5.
+                The name of the custom event, which should be "CUSTOMn", where n is 1 through 5.
                 The name is case-sensitive.
             </td>
         </tr>
     </tbody>
 </table>
 
-Example client-side calls for a player reaching a milestone, with generated IDs:
+Example client-side calls for users completing events, with generated IDs:
 
 ```java
 Random rand = new Random();
 
-//when milestone CUSTOM1 is reached
+// when custom event CUSTOM1 is completed
 long milestoneCustom1Id = rand.nextLong();
 PlaynomicsSession.milestone(milestoneCustom1Id, "CUSTOM1");
 ```
@@ -953,11 +837,11 @@ If you ever wish to test or troubleshoot your integration later on, simply set t
 
 Messaging Integration
 =====================
-This guide assumes you're already familiar with the concept of frames and messaging, and that you have all of the relevant `frames` setup for your application.
+This guide assumes you're already familiar with the concept of placements and messaging, and that you have all of the relevant `placements` setup for your application.
 
 If you are new to PlayRM's messaging feature, please refer to <a href="http://integration.playnomics.com" target="_blank">integration documentation</a>.
 
-Once you have all of your frames created with their associated `<PLAYRM-FRAME-ID>`s, you can start the integration process.
+Once you have all of your placements created with their associated `<PLAYRM-FRAME-ID>`s, you can start the integration process.
 
 ## SDK Integration
 
@@ -987,7 +871,7 @@ public class MessagingActivity extends Activity{
 }
 ```
 
-Loading frames through the SDK:
+Loading placements through the SDK:
 
 ```java
 Frame initWithFrameID(String frameId, Activity activity);
@@ -1004,12 +888,12 @@ Frame initWithFrameID(String frameId, Activity activity);
         <tr>
             <td><code>frameId</code></td>
             <td>String</td>
-            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>Unique identifier for the placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
             <td><code>context</code></td>
             <td>Activity</td>
-            <td>The activity your frame is running in.</td>
+            <td>The activity your placement is running in.</td>
         </tr>
     </tbody>
 </table>
@@ -1032,12 +916,12 @@ Frame initWithFrameID(String frameId, Activity context, FrameDelegate frameDeleg
         <tr>
             <td><code>frameId</code></td>
             <td>string</td>
-            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>Unique identifier for the placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
             <td><code>context</code></td>
             <td>Activity</td>
-            <td>The activity your frame is running in.</td>
+            <td>The activity your placement is running in.</td>
         </tr>
         <tr>
             <td><code>frameDelegate</code></td>
@@ -1049,11 +933,11 @@ Frame initWithFrameID(String frameId, Activity context, FrameDelegate frameDeleg
     </tbody>
 </table>
 
-Frames are loaded asynchronously to keep your game responsive. The `initWithFrameID` call begins the frame loading process. However, until you call `start` on the frame, the frame will not be drawn in the UI. This gives you control over when a frame will appear. Frames are destroyed when closed.
+Placements are loaded asynchronously to keep your application responsive. The `initWithFrameID` call begins the loading process. However, until you call `start` on the placement, the placement will not be drawn in the UI. This gives you control over when a placement will appear. Placements are destroyed when closed.
 
-In the example below, we initialize the frame when the `Activity` is first created and then show it after another event has taken place.
+In the example below, we initialize the placement when the `Activity` is first created and then show it after another event has taken place.
 
-In practice, a frame can be loaded in a variety of ways.
+In practice, a placement can be loaded in a variety of ways.
 
 ```java
 import com.playnomics.playrm.Frame;
@@ -1079,13 +963,13 @@ public class MessagingActivity extends Activity{
 
 ## Using Rich Data Callbacks
 
-Depending on your configuration, a variety of actions can take place when a frame's message is pressed or clicked:
+Depending on your configuration, a variety of actions can take place when a placement’s message is pressed or clicked:
 
-* Redirect the player to a web URL in the platform's browser application
-* Firing a Rich Data callback in your game
-* Or in the simplest case, just close the frame, provided that the **Close Button** has been configured correctly.
+* Redirect the user to a web URL in the platform's browser application
+* Firing a Rich Data callback in your app
+* Or in the simplest case, just close the placement, provided that the **Close Button** has been configured correctly.
 
-Rich Data is a JSON message that you associate with your message creative. When the player presses the message, the PlayRM SDK bubbles-up the associated JSON object to an implementation of the interface, `FrameDelegate` associated with the frame.
+Rich Data is a JSON message that you associate with your message creative. When the user presses the message, the PlayRM SDK bubbles-up the associated JSON object to an implementation of the interface, `FrameDelegate` associated with the placement.
 
 ```java
 public interface FrameDelegate {
@@ -1093,19 +977,19 @@ public interface FrameDelegate {
 }
 ```
 
-The actual contents of your message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your game. 
+The actual contents of your message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your app. 
 
 **The Rich Data callback will not fire if the Close button is pressed.**
 
-Here are three common use cases for frames and messaging campaigns:
+Here are three common use cases for placements and messaging campaigns:
 
-* [Game Start Frame](#game-start-frame)
-* [Event Driven Frame - Open the Store](#event-driven-frame-open-the-store) for instance, when the player is running low on premium currency
-* [Event Driven Frame - Level Completion](#event-driven-drame-level-completion)
+* [App Start Placement](#app-start-placement)
+* [Currency Balance Low Placement](#currency-balance-low-placement) - for instance, when the user is running low on premium currency
+* [Level Complete Placement](#level-complete-placement)
 
-### Game Start Frame
+### App Start Frame
 
-In this use-case, we want to configure a frame that is always shown to players when they start playing a new game. The message shown to the player may change based on the desired segments:
+In this use-case, we want to configure a placement that is always shown to users when they start a new session. The message shown to the user may change based on the desired segments:
 
 <table>
     <thead>
@@ -1131,7 +1015,7 @@ In this use-case, we want to configure a frame that is always shown to players w
             </td>
             <td>1st</td>
             <td>
-                In this case, we're worried once-active players are now in danger of leaving the game. We might offer them <strong>50 MonsterBucks</strong> to bring them back.
+                In this case, we're worried once-active users are now in danger of leaving the app. We might offer them <strong>50 MonsterBucks</strong> to bring them back.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/50-free-monster-bucks.png"/>
@@ -1143,7 +1027,7 @@ In this use-case, we want to configure a frame that is always shown to players w
             </td>
             <td>2nd</td>
             <td>
-                In this case, we want to thank the player for coming back and incentivize these lapsed players to continue doing so. We might offer them <strong>10 MonsterBucks</strong> to increase their engagement and loyalty.
+                In this case, we want to thank the user for coming back and incentivize these lapsed users to continue doing so. We might offer them <strong>10 MonsterBucks</strong> to increase their engagement and loyalty.
             </td>
             <td> 
                 <img src="http://playnomics.com/integration-dev/img/messaging/10-free-monster-bucks.png"/>
@@ -1151,11 +1035,11 @@ In this use-case, we want to configure a frame that is always shown to players w
         </tr>
         <tr>
             <td>
-                Default - players who don't fall into either segment.
+                Default - users who don't fall into either segment.
             </td>
             <td>3rd</td>
             <td>
-                In this case, we can offer a special item to them for returning to the grame.
+                In this case, we can offer a special item to them for returning to the app.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/free-bfb.png"/>
@@ -1164,7 +1048,7 @@ In this use-case, we want to configure a frame that is always shown to players w
     </tbody>
 </table>
 
-We want our game to process messages for awarding items to players. We process this data with an implementation of the `FrameDelegate` interface.
+We want our app to process messages for awarding items to users. We process this data with an implementation of the `FrameDelegate` interface.
 
 
 ```java
@@ -1189,7 +1073,7 @@ public class AwardFrameDelegate implements FrameDelegate {
 }
 ```
 
-And then attaching this AwardFrameDelegate class to the frame shown in an activity:
+And then attaching this AwardFrameDelegate class to the placement shown in an activity:
 
 
 ```java
@@ -1245,11 +1129,11 @@ Grant Bazooka
 }
 ```
 
-### Event Driven Frame - Open the Store
+### Currency Balance Low Placement
 
-An advantage of a *dynamic* frames is that they can be triggered by in-game events. For each in-game event you would configure a separate frame. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all players.
+An advantage of a *dynamic* placement is that it can be triggered by in-app events. For each in-app event you would configure a separate placement. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all users.
 
-In particular one event, for examle, a player may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all players.
+For example, a user may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all users.
 
 <table>
     <thead>
@@ -1271,11 +1155,12 @@ In particular one event, for examle, a player may deplete their premium currency
     <tbody>
         <tr>
             <td>
-                Default - all players, because this message is intended for anyone playing the game.
+                Default - all users, because this message is intended for anyone using the app.
+
             </td>
             <td>1st</td>
             <td>
-                You notice that the player's in-game, premium currency drops below a certain threshold, now you can prompt them to re-up with this <strong>message</strong>.
+                You notice that the user’s in-app, premium currency drops below a certain threshold, now you can prompt them to re-up with this <strong>message</strong>.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/running-out-of-monster-bucks.png"/>
@@ -1297,7 +1182,7 @@ public class StoreFrameDelegate implements FrameDelegate {
             if(!data.isNull("actionType") && 
                 data.getString("actionType").equals("openStore"))
             {
-                //opens the store in our game
+                //opens the store in our app
                 Store.open();
             }
         }
@@ -1305,7 +1190,7 @@ public class StoreFrameDelegate implements FrameDelegate {
 }
 ```
 
-The Default message would be configured in the Control Panel to use this callback by placing this in the **Target Data** for the message :
+The Default message would be configured in the Control Panel to use this callback by placing this in the **Target Data** for the message:
 
 ```json
 {
@@ -1314,9 +1199,9 @@ The Default message would be configured in the Control Panel to use this callbac
 }
 ```
 
-### Event Driven Frame - Level Completion
+### Level Complete Placement
 
-In the following example, we wish to generate third-party revenue from players unlikely to monetize by showing them a segmented message after completing a level or challenge: 
+In the following example, we wish to generate third-party revenue from users unlikely to monetize by showing them a segmented message after completing a level or challenge:
 
 <table>
     <thead>
@@ -1338,7 +1223,7 @@ In the following example, we wish to generate third-party revenue from players u
     <tbody>
         <tr>
             <td>
-                Non-monetizers, in their 5th day of game play
+                Non-Monetizers, in their 5th day of app usage
             </td>
             <td>1st</td>
             <td>Show them a 3rd party ad, because they are unlikely to monetize.</td>
@@ -1352,7 +1237,7 @@ In the following example, we wish to generate third-party revenue from players u
             </td>
             <td>2nd</td>
             <td>
-                You simply congratulate them on completing the level and grant them some attention currency, "Mana" for completeing the level.
+                You simply congratulate them on completing the level and grant them some attention currency, "Mana" for completing the level.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/darn-good-job.png"/>
@@ -1361,9 +1246,9 @@ In the following example, we wish to generate third-party revenue from players u
     </tbody>
 </table>
 
-This another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
+This is another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
 
-* **Non-monetizers, in their 5th day of game play**, a Target URL: `HTTP URL for Third Party Ad`
+* **Non-monetizers, in their 5th day of app usage**, a Target URL: `HTTP URL for Third Party Ad`
 * **Default**, Target Data:
 
 ```json
@@ -1392,7 +1277,7 @@ Change Log
 
 #### Version 3
 * Support for internal messaging
-* Added milestone module
+* Added custom event module
 
 #### Version 2
 * First release
